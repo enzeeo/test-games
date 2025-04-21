@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Cookie Clicker</title>
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"></script>
+</head>
+
+<body>
+  <script>
+    const config = {
+      type: Phaser.AUTO,
+      width: 800,
+      height: 600,
+      backgroundColor: '#f0f0f0',
+      scene: {
+        preload: function () { },
+        create: function () {
+          // Load saved score or start at 0
+          const saved = localStorage.getItem('cookieClickScore');
+          this.score = saved ? parseInt(saved, 10) : 0;
+
+          // Display score text
+          this.scoreText = this.add.text(16, 16, 'Score: ' + this.score, { fontSize: '32px', fill: '#000' });
+
+          // Create clickable circle (cookie)
+          this.cookie = this.add.circle(
+            this.cameras.main.width / 2,
+            this.cameras.main.height / 2,
+            100,
+            0x8B4513
+          )
+            .setInteractive({ useHandCursor: true });
+
+          // On click, increment score, update text, and save
+          this.cookie.on('pointerdown', () => {
+            this.score++;
+            this.scoreText.setText('Score: ' + this.score);
+            localStorage.setItem('cookieClickScore', this.score);
+          });
+        }
+      }
+    };
+
+    // Launch game
+    new Phaser.Game(config);
+  </script>
+</body>
+
+</html>
